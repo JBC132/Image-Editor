@@ -1,9 +1,10 @@
 import PySimpleGUI as sg
+from PIL import Image, ImageFilter
 
 def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
-    pass
+    image = original.filter(ImageFilter.GaussianBlur(blur))
 
-image_path = ''
+image_path = 'test.png'
 control_col = sg.Column([
     [sg.Frame('Blur', layout = [[sg.Slider(range = (0,10), orientation = 'h', key = '-BLUR-')]])],
     [sg.Frame('Contrast', layout = [[sg.Slider(range = (0,10), orientation = 'h', key = '-CONTRAST-')]])],
@@ -11,7 +12,7 @@ control_col = sg.Column([
     [sg.Checkbox('Flip x', key = '-FLIPX-'), sg.Checkbox('Flip y', key = '-FLIPY-')],
     [sg.Button('Save image', key = '-SAVE-')]
 ])
-image_col = sg.Column([[sg.Image('test.png')]])
+image_col = sg.Column([[sg.Image(image_path)]])
 layout = [[control_col, image_col]]
 
 original = Image.open(image_path)
