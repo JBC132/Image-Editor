@@ -1,16 +1,28 @@
 import PySimpleGUI as sg
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps
 from io import BytesIO 
 
 def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
     image = original.filter(ImageFilter.GaussianBlur(blur))
+    image = image.filter(ImageFilter.UnsharpMask(contrast))
+
+    if emboss:
+        image = image.filter(ImageFilter.EMBOSS())
+    if contour:
+        image = image.filter(Image.CONTOUR())
+    
+    if flipx:
+        image = ImageOps.mirror(image)
+        
+    if flipy:
+        image = ImageOps.flip(image)
     
     bio = BytesIO()
     image.save(bio, format = 'PNG')
 
     window['-IMAGE-'].update(data = bio.getvalue())
 
-image_path = 'Test.png'
+image_path = "Test.png"
 
 control_col = sg.Column([
     [sg.Frame('Blur', layout = [[sg.Slider(range = (0,10), orientation = 'h', key = '-BLUR-')]])],
