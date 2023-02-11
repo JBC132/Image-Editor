@@ -9,7 +9,7 @@ def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
     if emboss:
         image = image.filter(ImageFilter.EMBOSS())
     if contour:
-        image = image.filter(Image.CONTOUR())
+        image = image.filter(ImageFilter.CONTOUR())
     
     if flipx:
         image = ImageOps.mirror(image)
@@ -38,7 +38,7 @@ original = Image.open(image_path)
 window = sg.Window('Image Editor', layout)
 
 while True:
-    event, values = window.read()
+    event, values = window.read(timeout = 50)
     if event == sg.WIN_CLOSED:
         break
     
@@ -51,5 +51,9 @@ while True:
         values['-FLIPX-'],
         values['-FLIPY-'],
     )
+
+    if event == '-SAVE-':
+        save_path = sg.popup_get_file('Save', save_as=True, no_window=True)
+        print(save_path)
 
 window.close()
