@@ -3,6 +3,7 @@ from PIL import Image, ImageFilter, ImageOps
 from io import BytesIO 
 
 def update_image(original, blur, contrast, emboss, contour, flipx, flipy):
+    global image
     image = original.filter(ImageFilter.GaussianBlur(blur))
     image = image.filter(ImageFilter.UnsharpMask(contrast))
 
@@ -53,7 +54,7 @@ while True:
     )
 
     if event == '-SAVE-':
-        save_path = sg.popup_get_file('Save', save_as=True, no_window=True)
-        print(save_path)
+        save_path = sg.popup_get_file('Save', save_as=True, no_window=True) + '.png'
+        image.save(save_path, 'PNG')
 
 window.close()
